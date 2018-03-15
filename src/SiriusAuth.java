@@ -10,16 +10,19 @@ public class SiriusAuth {
     private String algo;
     private String key;
     private int digits;
+    private int key_validity;
     private SiriusAuth(Builder builder) throws NoSuchAlgorithmException {
         this.algo=builder.algo;
         this.digits=builder.digits;
         this.key=builder.key;
+        this.key_validity=builder.key_validity;
     }
     public static class Builder {
         private String algo = "MD5";
         private int digits=6;
         private String key;
         private int key_length=32;
+        private int key_validity=30;
 
         public Builder Algorithm(String algo) {
             this.algo = algo;
@@ -35,6 +38,10 @@ public class SiriusAuth {
         }
         public Builder KeyLength(int length){
             this.key_length=length;
+            return this;
+        }
+        public Builder KeyValidity(int seconds){
+            this.key_validity=seconds;
             return this;
         }
         public SiriusAuth build() throws NoSuchAlgorithmException {
@@ -53,7 +60,7 @@ public class SiriusAuth {
         }
     }
     public int getTimeBasedPassword() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        String temp=hash(hash(key)+hash(String.valueOf(System.currentTimeMillis()/30000)));
+        String temp=hash(hash(key)+hash(String.valueOf(System.currentTimeMillis()/(key_validity*1000))));
         byte[]bytes=temp.getBytes("UTF-8");
         String binary="";
         for(int i=0;i<4;i++){
