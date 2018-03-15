@@ -24,6 +24,10 @@ You can change the used hashing algorithm. (standard algorithm is MD5)
 ```SiriusAuth siriusAuth= new SiriusAuth.Builder().Digits(int digits).build()```
 
 You can change the digits of the time-based one-time password (standard digits are 6)
+
+```SiriusAuth siriusAuth= new SiriusAuth.Builder().KeyValidity(int seconds).build()```
+
+This determines the duration a generated password is valid
 ## Usage
 First you initiate the SiriusAuth object
 
@@ -31,7 +35,7 @@ First you initiate the SiriusAuth object
 
 ```siriusAuth.getTimeBasedPassword()```
 
-This returns the time-based one-time password which changes every 30 seconds.
+This returns the time-based one-time password which changes every 30 seconds by standard.
 
 ```siriusAuth.getKey()```
 
