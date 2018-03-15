@@ -28,6 +28,11 @@ You can change the digits of the time-based one-time password (standard digits a
 ```SiriusAuth siriusAuth= new SiriusAuth.Builder().KeyValidity(int seconds).build()```
 
 This determines the duration a generated password is valid
+
+```SiriusAuth siriusAuth= new SiriusAuth.Builder().TemporalFlexibility(int seconds).build()```
+
+This specifies the tolerable time frame where SiriusAuth accepts validates time-based one-time passwords. For example if the time between two of your devices differs for about 3 seconds, setting the temporal flexiblity parameter to 4 seconds will fix this. SiriusAuth will then accept passwords up to 4 seconds too old or too new.
+
 ## Usage
 First you initiate the SiriusAuth object
 
@@ -41,7 +46,12 @@ This returns the time-based one-time password which changes every 30 seconds by 
 
 This returns the key.
 
-```siriusAuth.getAlgo()```
+```siriusAuth.getAlgorithm()```
 
 This returns the used hashing algorithm.
+
+```siriusAuth.checkPassword(int password)```
+
+Returns true if the password is valid. Returns false if the password is not valid at all or more than 3 seconds too old or too new. (by standard)
+
 
