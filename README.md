@@ -27,7 +27,7 @@ You can change the digits of the time-based one-time password (standard digits a
 
 ```SiriusAuth siriusAuth= new SiriusAuth.Builder().KeyValidity(int seconds).build()```
 
-This determines the time a generated password is valid
+This determines the duration a generated password is valid
 ## Usage
 First you initiate the SiriusAuth object
 
