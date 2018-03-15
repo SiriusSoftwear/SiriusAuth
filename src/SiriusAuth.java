@@ -11,11 +11,13 @@ public class SiriusAuth {
     private String key;
     private int digits;
     private int key_validity;
+    private int temporal_flexibility;
     private SiriusAuth(Builder builder) throws NoSuchAlgorithmException {
         this.algo=builder.algo;
         this.digits=builder.digits;
         this.key=builder.key;
         this.key_validity=builder.key_validity;
+        this.temporal_flexibility=builder.temporal_flexibility;
     }
     public static class Builder {
         private String algo = "MD5";
@@ -23,6 +25,7 @@ public class SiriusAuth {
         private String key;
         private int key_length=32;
         private int key_validity=30;
+        private int temporal_flexibility=3;
 
         public Builder Algorithm(String algo) {
             this.algo = algo;
@@ -42,6 +45,10 @@ public class SiriusAuth {
         }
         public Builder KeyValidity(int seconds){
             this.key_validity=seconds;
+            return this;
+        }
+        public Builder TemporalFlexibility(int seconds){
+            this.temporal_flexibility=seconds;
             return this;
         }
         public SiriusAuth build() throws NoSuchAlgorithmException {
@@ -72,6 +79,19 @@ public class SiriusAuth {
 
         return Integer.parseInt(formattedNumber);
     }
+    public int getSpecificTimeBasedPassword(long millis) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        String temp=hash(hash(key)+hash(String.valueOf(millis/(key_validity*1000))));
+        byte[]bytes=temp.getBytes("UTF-8");
+        String binary="";
+        for(int i=0;i<4;i++){
+            binary=binary+Integer.toBinaryString(bytes[i]);
+        }
+        int number=Integer.parseInt(binary, 2);
+        DecimalFormat format = new DecimalFormat("#000000000");
+        String formattedNumber = format.format(number%(Math.pow(10,digits)));
+
+        return Integer.parseInt(formattedNumber);
+    }
     public String getAlgorithm(){
         return algo;
     }
@@ -84,5 +104,11 @@ public class SiriusAuth {
         m.update(data,0,data.length);
         BigInteger i = new BigInteger(1,m.digest());
         return String.format("%1$032X", i);
+    }
+    public boolean checkValidity(int password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        if((password==getTimeBasedPassword())||(password==getSpecificTimeBasedPassword(System.currentTimeMillis()-temporal_flexibility))||(password==System.currentTimeMillis()+temporal_flexibility)){
+            return true;
+        }
+        return false;
     }
 }
