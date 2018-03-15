@@ -1,5 +1,5 @@
 # SiriusAuth
-A lightweighted library to provide easy access to time-based one-time passwords (TOTP).
+A lightweight library to provide easy access to time-based one-time passwords (TOTP).
 The library itself is very easy and intuitive to use.
 ## Build options
 First you need to initiate the SiriusAuth object.
@@ -25,3 +25,19 @@ You can change the used hashing algorithm. (standard algorithm is MD5)
 
 You can change the digits of the time-based one-time password (standard digits are 6)
 ## Usage
+First you initiate the SiriusAuth object
+
+```SiriusAuth siriusAuth=new SiriusAuth.Builder().build()```
+
+```siriusAuth.getTimeBasedPassword()```
+
+This returns the time-based one-time password which changes every 30 seconds.
+
+```siriusAuth.getKey()```
+
+This returns the key.
+
+```siriusAuth.getAlgo()```
+
+This returns the used hashing algorithm.
+
