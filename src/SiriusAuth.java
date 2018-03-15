@@ -72,7 +72,7 @@ public class SiriusAuth {
 
         return Integer.parseInt(formattedNumber);
     }
-    public String getAlgo(){
+    public String getAlgorithm(){
         return algo;
     }
     public String getKey(){
